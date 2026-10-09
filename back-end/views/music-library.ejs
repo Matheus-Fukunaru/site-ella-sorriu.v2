@@ -1,0 +1,21 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Músicas | Ella Sorriu</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/music-library.css?v=60"><script src="/admin.js" defer></script><script src="/music-admin.js?v=60" defer></script></head>
+<body class="admin-page"><%- include('partials/admin-header', {admin, csrfToken, activeSection:'music'}) %>
+<main class="admin-shell"><div class="admin-heading"><div><p class="kicker">Trilhas para presentear</p><h1>Biblioteca de músicas</h1><p>Cadastre áudios autorizados. Seus clientes poderão ouvir e escolher sem sair do site.</p></div></div>
+<% if (saved) { %><p class="admin-success" role="status">Música atualizada.</p><% } %>
+<section class="admin-panel music-admin-panel"><h2>Adicionar música</h2>
+<form data-music-upload><input type="hidden" name="_csrf" value="<%= csrfToken %>"><div class="music-admin-fields">
+<label>Nome da música<input name="title" maxlength="100" required></label><label>Artista<input name="artist" maxlength="100" required></label>
+<label>Estilo principal<select name="genre" required><% genres.forEach(genre => { %><option><%= genre %></option><% }) %></select></label>
+<label>Arquivo de áudio (até 8 MB)<input name="audio" type="file" accept=".mp3,.ogg,.m4a,.wav" required></label></div>
+<label class="music-rights"><input type="checkbox" name="authorized" required> Tenho autorização para disponibilizar este áudio aos clientes no site.</label>
+<button class="admin-button" type="submit">Cadastrar música</button><p role="status" data-music-upload-status></p></form></section>
+<section class="music-admin-tracks" aria-label="Músicas cadastradas">
+<% if (!tracks.length) { %><div class="admin-empty"><h2>A biblioteca está pronta para começar.</h2><p>Nenhuma música foi adicionada. Use o formulário acima para publicar a primeira.</p></div><% } %>
+<% tracks.forEach(track => { %><article class="admin-panel music-admin-panel"><h2><%= track.title %></h2><p><%= track.artist %> · <%= track.genre %> · <%= track.active ? 'No catálogo' : 'Arquivada' %></p>
+<audio controls preload="none" src="/media/music/<%= track.filename %>" aria-label="Ouvir <%= track.title %>"></audio>
+<form method="post" action="/admin/music/<%= track.id %>"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><div class="music-admin-fields">
+<label>Nome<input name="title" value="<%= track.title %>" maxlength="100" required></label><label>Artista<input name="artist" value="<%= track.artist %>" maxlength="100" required></label>
+<label>Estilo<select name="genre"><% genres.forEach(genre => { %><option <%= track.genre === genre ? 'selected' : '' %>><%= genre %></option><% }) %></select></label>
+<label>Disponibilidade<select name="active"><option value="1" <%= track.active ? 'selected' : '' %>>Disponível para escolher</option><option value="0" <%= !track.active ? 'selected' : '' %>>Arquivada</option></select></label></div>
+<p>Arquivar retira a música das novas escolhas, sem apagar o áudio dos sites já criados.</p><button class="admin-secondary-button" type="submit">Salvar alterações</button></form></article><% }) %>
+</section></main></body></html>

@@ -1,0 +1,27 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title><%= product ? 'Editar produto' : 'Novo produto' %> | Ella Sorriu</title><link rel="stylesheet" href="/style.css"><script src="/admin.js" defer></script></head>
+<body class="admin-page"><%- include('partials/admin-header', { admin, csrfToken, activeSection: 'products' }) %><main class="admin-shell products-admin">
+  <div class="admin-heading"><div><p class="kicker">Catálogo Ella Sorriu</p><h1><%= product ? 'Editar produto' : 'Novo produto' %></h1><p class="admin-description"><%= approvalExempt && admin.role === 'attendant' ? 'Suas alterações serão publicadas imediatamente nesta conta.' : admin.role === 'attendant' ? 'Suas alterações serão enviadas para aprovação antes de aparecerem no site.' : 'As alterações feitas por sua função são publicadas imediatamente e ficam registradas no histórico.' %></p></div><a class="admin-secondary-button" href="/admin/products">Voltar aos produtos</a></div>
+  <% if (error) { %><p class="admin-alert" role="alert"><%= error %></p><% } %>
+  <form class="product-edit-form" action="<%= product ? '/admin/products/' + product.id : '/admin/products' %>" method="post" data-product-edit-form>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="photos_json" value="<%= JSON.stringify(product && product.photos ? product.photos : []) %>" data-product-photos>
+    <div class="product-edit-grid">
+      <section class="admin-panel product-edit-main">
+        <h2>Informações do produto</h2>
+        <label>Nome<input name="name" required minlength="2" maxlength="120" value="<%= product ? product.name : '' %>" placeholder="Nome do produto"></label>
+        <label>Descrição<textarea name="description" rows="5" maxlength="1800" placeholder="Conte somente informações reais sobre este produto"><%= product ? product.description : '' %></textarea></label>
+        <div class="product-form-two"><label>Preço (R$)<input name="price" type="number" min="0.01" max="9999999.99" step="0.01" required value="<%= product && product.priceCents != null ? (product.priceCents / 100).toFixed(2) : '' %>" placeholder="89,90"></label><label>Categoria<select name="category_id" required><option value="">Selecione uma categoria</option><% categories.forEach(function(category) { %><option value="<%= category.id %>" <%= product && Number(product.categoryId) === Number(category.id) ? 'selected' : '' %>><%= category.name %></option><% }) %></select></label></div>
+        <label>Vídeo do produto (URL HTTPS)<input name="video_url" type="url" value="<%= product ? (product.videoUrl || '') : '' %>" placeholder="https://...mp4"><small>Opcional. Use um vídeo hospedado em HTTPS.</small></label>
+        <div class="product-switches"><label><input type="checkbox" name="available" value="1" <%= !product || product.available ? 'checked' : '' %>> Disponível para encomenda</label><label><input type="checkbox" name="active" value="1" <%= !product || product.active ? 'checked' : '' %>> Exibir no catálogo após publicação</label></div>
+      </section>
+      <section class="admin-panel product-photo-panel">
+        <h2>Fotos</h2><p>Até seis imagens reais do produto. JPG, PNG ou WebP, até 3 MB por foto.</p>
+        <label class="admin-secondary-button product-photo-picker">Adicionar fotos<input type="file" accept="image/jpeg,image/png,image/webp" multiple data-product-image-upload></label>
+        <p class="product-upload-status" data-product-upload-status aria-live="polite"></p>
+        <div class="product-photo-preview-list" data-product-photo-list></div>
+        <section class="product-live-preview" aria-label="Prévia do produto no site"><p class="kicker">Prévia no site</p><article><div class="product-live-preview-image"><img data-product-preview-image alt="Prévia do produto" <%= product && product.photos && product.photos.length ? 'src="/admin/products/media/' + encodeURIComponent(product.photos[0]) + '"' : 'hidden' %>><span data-product-preview-placeholder <%= product && product.photos && product.photos.length ? 'hidden' : '' %>>Foto do produto</span></div><div><p data-product-preview-category><%= product ? product.categoryName : 'Categoria' %></p><h3 data-product-preview-name><%= product ? product.name : 'Nome do produto' %></h3><strong data-product-preview-price><%= product && product.priceCents != null ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.priceCents / 100) : 'Valor sob consulta' %></strong><p data-product-preview-description><%= product && product.description ? product.description : 'Descrição do produto' %></p></div></article></section>
+        <p class="product-photo-help">As fotos novas ficam privadas enquanto uma alteração aguarda aprovação.</p>
+      </section>
+    </div>
+    <div class="product-form-actions"><button class="admin-button" type="submit"><%= admin.role === 'attendant' && !approvalExempt ? 'Enviar para aprovação' : 'Salvar e publicar' %></button><a class="admin-text-button" href="/admin/products">Cancelar</a></div>
+  </form>
+</main></body></html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR" class="gift-builder-page">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3eee7">
+  <title>Crie um site de presente · Ella Sorriu</title>
+  <script src="local-file-redirect.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Great+Vibes&family=Manrope:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/gift-site.css?v=55">
+  <link rel="stylesheet" href="/gift-builder.css?v=59">
+  <link rel="stylesheet" href="/music-library.css?v=60">
+</head>
+<body class="gift-builder-body">
+  <header class="gift-builder-header">
+    <a class="wordmark" href="/" aria-label="Ela Sorriu — início"><img class="brand-logo" src="imagens/ela-sorriu-logo-oficial.png" alt="Ela Sorriu" width="220" height="140"><small>Flores · Presentes · Balões</small></a>
+    <a class="gift-builder-back" href="/">Voltar ao site <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="gift-builder-shell">
+    <div class="gift-builder-intro">
+      <p class="kicker">Um presente que fica</p>
+      <h1>Crie um cantinho<br><em>para alguém especial.</em></h1>
+      <p class="gift-builder-summary">Crie um site completo com suas fotos, música, cartas e detalhes escolhidos por você. Veja tudo no celular antes de finalizar.</p>
+      <nav class="gift-builder-shortcuts" aria-label="Ir para uma etapa"><a href="#gift-media">Escolher fotos e música ↓</a><a href="#gift-advanced">Escolher tema ↓</a><a href="#gift-preview-area">Ver prévia ↓</a></nav>
+    </div>
+
+    <div class="gift-builder-layout">
+      <form class="gift-builder-form" data-gift-builder-form novalidate>
+        <section class="gift-builder-section">
+          <div class="gift-section-heading"><span>01</span><div><p class="kicker">A história</p><h2>Para quem é?</h2></div></div>
+          <div class="gift-field-grid">
+            <label>Nome de quem recebe<input name="recipientName" maxlength="100" required placeholder="Ex.: Ana"></label>
+            <label>Seu nome<input name="senderName" maxlength="100" required placeholder="Ex.: João"></label>
+            <fieldset class="gift-occasion-fieldset"><legend>Ocasião</legend><div class="gift-choice-grid gift-occasion-choices" role="radiogroup" aria-label="Ocasião do site">
+              <label class="gift-choice is-selected" data-occasion-choice="birthday"><input type="radio" name="occasion" value="Aniversário" checked><span><b>Aniversário</b><small>bolo, ciclo e celebração</small></span></label>
+              <label class="gift-choice" data-occasion-choice="love"><input type="radio" name="occasion" value="Namoro"><span><b>Namoro</b><small>romântico e íntimo</small></span></label>
+              <label class="gift-choice" data-occasion-choice="wedding"><input type="radio" name="occasion" value="Casamento"><span><b>Casamento</b><small>clássico e elegante</small></span></label>
+              <label class="gift-choice" data-occasion-choice="friendship"><input type="radio" name="occasion" value="Amizade"><span><b>Amizade</b><small>leve e afetivo</small></span></label>
+              <label class="gift-choice" data-occasion-choice="mother"><input type="radio" name="occasion" value="Dia das Mães"><span><b>Dia das Mães</b><small>acolhedor e delicado</small></span></label>
+              <label class="gift-choice" data-occasion-choice="father"><input type="radio" name="occasion" value="Dia dos Pais"><span><b>Dia dos Pais</b><small>presença e cuidado</small></span></label>
+              <label class="gift-choice" data-occasion-choice="kids"><input type="radio" name="occasion" value="Dia das Crianças"><span><b>Dia das Crianças</b><small>colorido e divertido</small></span></label>
+              <label class="gift-choice" data-occasion-choice="thanks"><input type="radio" name="occasion" value="Agradecimento"><span><b>Agradecimento</b><small>calmo e sincero</small></span></label>
+            </div></fieldset>
+            <fieldset class="gift-segment-field gift-person-field"><legend>Estilo da pessoa</legend><div class="gift-segments">
+              <label><input type="radio" name="personStyle" value="neutral" checked><span>Neutro</span></label>
+              <label><input type="radio" name="personStyle" value="masculine"><span>Masculino</span></label>
+              <label><input type="radio" name="personStyle" value="feminine"><span>Feminino</span></label>
+            </div></fieldset>
+            <div class="gift-title-settings"><label class="gift-check-row"><input type="checkbox" name="showTitle" checked><span><b>Exibir título principal</b><small>Você pode ocultar o título e deixar a página mais minimalista.</small></span></label><label data-page-title-field>Título personalizado <small>(opcional)</small><input name="pageTitle" maxlength="140" placeholder="Ex.: Para a minha pessoa favorita"></label></div>
+          </div>
+        </section>
+
+        <section class="gift-builder-section" id="gift-media" aria-labelledby="gift-media-heading">
+          <div class="gift-section-heading"><span>02</span><div><p class="kicker">As memórias</p><h2 id="gift-media-heading">Fotos e música</h2></div></div>
+          <p class="gift-media-intro">Monte a história com até dez fotos principais. Você pode mudar a ordem e escrever uma descrição. A música só toca quando a pessoa clicar em Reproduzir.</p>
+          <div class="gift-media-tools"><label class="gift-check-row"><input type="checkbox" data-all-photo-music><span><b>Selecionar todas para a música</b><small>Mostra o botão de música em todas as fotos, inclusive nos carrosséis e nas próximas fotos adicionadas. Não inicia a música automaticamente.</small></span></label></div>
+          <label class="gift-upload-label">Suas fotos <small>(até 10; JPG, PNG ou WebP)</small><input type="file" data-gift-photos accept="image/jpeg,image/png,image/webp" multiple><span class="gift-upload-hint">Escolha suas fotos neste computador</span></label>
+          <p class="gift-media-count" data-photo-count aria-live="polite">Nenhuma foto escolhida · até 10 fotos</p>
+          <div class="gift-photo-editor" data-gift-photo-list aria-live="polite"></div>
+          <fieldset class="gift-segment-field"><legend>Como mostrar as fotos</legend><div class="gift-segments gift-segments-two">
+            <label><input type="radio" name="photoLayout" value="interleaved" checked><span>Fotos em grupos e cartas abaixo</span></label>
+            <label><input type="radio" name="photoLayout" value="alternating"><span>Uma foto e uma cartinha alternadas</span></label>
+            <label><input type="radio" name="photoLayout" value="gallery"><span>Galeria antes das cartinhas</span></label>
+          </div></fieldset>
+          <label>Ou use um link de música ou vídeo <small>(opcional; use HTTPS)</small><input name="musicLink" data-music-link type="url" maxlength="500" placeholder="Cole um link do YouTube, Spotify, Drive ou outro serviço"></label>
+          <div class="gift-music-search"><label>Buscar uma música<input data-song-search maxlength="120" placeholder="Digite o nome da música e artista"></label><div><button type="button" data-search-youtube>Buscar no YouTube</button><button type="button" data-search-spotify>Buscar no Spotify</button><button type="button" data-import-music-link>Importar link direto</button></div><small>Links diretos de áudio ou vídeo HTTPS são baixados com segurança e cortados em até 1min30s. YouTube e Spotify abrem como link externo.</small></div>
+          <label class="gift-upload-label gift-music-upload">Ou envie seu áudio ou vídeo <small>(áudio até 8 MB; vídeo MP4/WebM até 70 MB)</small><input type="file" data-gift-music accept="audio/mpeg,audio/ogg,audio/mp4,audio/wav,video/mp4,video/webm"><span class="gift-upload-hint">Não precisa enviar arquivo se já escolheu uma música da biblioteca.</span></label>
+          <p class="gift-form-note" data-music-state>Escolha um arquivo, envie um vídeo para extrair a música ou cole um link HTTPS.</p>
+          <details class="gift-music-help" open><summary>Como baixar e colocar uma música</summary><ol><li>Abra a música no YouTube, Spotify ou no seu serviço preferido.</li><li>Copie o link HTTPS e cole no campo acima, ou baixe o arquivo MP3/M4A no seu computador.</li><li>Use <strong>Enviar áudio ou vídeo</strong> para tocar dentro do site. Vídeos têm a música extraída automaticamente.</li></ol><p>O site limita o áudio importado a 1 minuto e 30 segundos para carregar rápido.</p></details>
+          <audio class="gift-music-sample" data-music-preview controls preload="none" hidden aria-label="Ouvir a música escolhida"></audio>
+          <label>Nome da música <small>(opcional)</small><input name="musicTitle" maxlength="100" placeholder="Ex.: A nossa música"></label>
+          <label>Mais uma mensagem <small>(opcional)</small><textarea name="extraNote" maxlength="500" placeholder="Uma lembrança, uma dedicatória ou algo só de vocês..."></textarea></label>
+          <div class="gift-carousel-editor"><div class="gift-carousel-head"><h3>Carrosséis extras</h3><button type="button" class="gift-text-action" data-add-carousel>+ Adicionar carrossel</button></div><p class="gift-form-note" data-carousel-count>Adicione até dois carrosséis, com até dez fotos em cada um.</p><div data-gift-carousels></div></div>
+        </section>
+
+        <section class="gift-builder-section">
+          <div class="gift-section-heading"><span>03</span><div><p class="kicker">O endereço</p><h2>Escolha a URL</h2></div></div>
+          <label class="gift-slug-field">ellasorriu.com.br/presente/<input name="slug" required pattern="[a-zA-Z0-9-]{3,48}" maxlength="48" placeholder="ana-2026" autocomplete="off"><span class="gift-slug-state" data-slug-state>Digite para verificar</span></label>
+          <p class="gift-form-note">Use letras, números e hífens. A disponibilidade é verificada automaticamente.</p>
+        </section>
+
+        <section class="gift-builder-section">
+          <div class="gift-section-heading"><span>04</span><div><p class="kicker">A atmosfera</p><h2>Escolha um estilo</h2></div></div>
+          <div class="gift-choice-grid gift-style-choices" role="radiogroup" aria-label="Estilo do site">
+            <label class="gift-choice is-selected" data-style-choice="ella"><input type="radio" name="style" value="ella" checked><span><b>Ella Sorriu</b><small>linho e marsala</small></span></label>
+            <label class="gift-choice" data-style-choice="romantic"><input type="radio" name="style" value="romantic"><span><b>Romântico</b><small>delicado e envolvente</small></span></label>
+            <label class="gift-choice" data-style-choice="botanical"><input type="radio" name="style" value="botanical"><span><b>Jardim</b><small>papel, folhas e oliva</small></span></label>
+            <label class="gift-choice" data-style-choice="retro"><input type="radio" name="style" value="retro"><span><b>Álbum retrô</b><small>molduras e memória</small></span></label>
+          </div>
+        </section>
+
+        <div class="gift-preview-before-letters"><div><p class="kicker">Veja como está ficando</p><h2>Uma espiada antes das cartinhas?</h2><p>Abra a prévia no celular mesmo sem terminar. As cartinhas vazias aparecem com textos de exemplo apenas na prévia.</p></div><button type="button" class="button button-primary" data-open-phone>Ver prévia no celular ↗</button></div>
+        <section class="gift-builder-section">
+          <div class="gift-section-heading"><span>05</span><div><p class="kicker">As cartas</p><h2>Escreva de duas a oito.</h2></div></div>
+          <label>Primeira cartinha<textarea name="letterOne" maxlength="1800" required placeholder="Escreva a primeira mensagem..."></textarea></label>
+          <label>Segunda cartinha<textarea name="letterTwo" maxlength="1800" required placeholder="Mais uma palavra para guardar..."></textarea></label>
+          <label>Terceira cartinha <small>(opcional)</small><textarea name="letterThree" maxlength="1800" placeholder="Se quiser, escreva uma terceira..."></textarea></label>
+          <div data-extra-letters></div><button type="button" class="gift-text-action" data-add-letter>+ Adicionar cartinha</button>
+        </section>
+
+        <section class="gift-builder-section" id="gift-advanced">
+          <div class="gift-section-heading"><span>06</span><div><p class="kicker">Seu jeito</p><h2>Claro ou escuro?</h2></div></div>
+          <p class="gift-media-intro">Escolha o tema para a prévia e para o site publicado.</p>
+            <fieldset class="gift-segment-field"><legend>Tema</legend><div class="gift-segments gift-segments-two"><label><input type="radio" name="theme" value="light" checked><span>Claro</span></label><label><input type="radio" name="theme" value="dark"><span>Escuro</span></label></div></fieldset>
+        </section>
+
+        <section class="gift-builder-section gift-payment-section" aria-labelledby="gift-payment-heading">
+          <div class="gift-section-heading"><span>07</span><div><p class="kicker">Pagamento</p><h2 id="gift-payment-heading">R$ 49,90</h2></div></div>
+          <p class="gift-form-note">Escolha como prefere pagar. O pagamento é combinado com a Ela Sorriu após o envio.</p>
+          <div class="gift-payment-grid"><label class="gift-payment"><input type="radio" name="paymentMethod" value="pix" checked><span><b>Pix</b><small>rápido e prático</small></span></label><label class="gift-payment"><input type="radio" name="paymentMethod" value="card"><span><b>Cartão</b><small>crédito ou débito</small></span></label></div>
+        </section>
+        <p class="gift-builder-feedback" data-gift-feedback role="status" aria-live="polite"></p>
+        <button class="button button-primary gift-submit" type="submit">Criar meu site em teste <span class="button-orb" aria-hidden="true">↗</span></button>
+      </form>
+
+      <aside class="gift-builder-preview-wrap" id="gift-preview-area" aria-label="Prévia do site">
+        <div class="gift-preview-label"><span>Prévia ao vivo</span><i></i><button type="button" data-open-phone>Ver no celular ↗</button></div>
+        <div class="gift-preview" data-gift-preview data-style="ella" role="button" tabindex="0" aria-label="Abrir a prévia no simulador de celular">
+          <div class="gift-preview-top"><span class="gift-preview-kicker">Um presente feito para você</span></div>
+          <div class="gift-preview-art" data-preview-art aria-hidden="true"></div>
+          <h2 data-preview-title><small data-preview-title-prefix>Para</small><strong data-preview-recipient>alguém especial</strong></h2>
+          <p data-preview-intro>Uma página feita para guardar palavras, memórias e carinho.</p>
+          <div class="gift-preview-photo" data-preview-photo><span>Suas fotos aparecerão aqui</span></div>
+          <div class="gift-preview-gallery" data-preview-gallery aria-label="Fotos escolhidas"></div>
+          <p class="gift-preview-media" data-preview-media>Escolha fotos e música para montar este site.</p>
+          <div class="gift-preview-letters"><article><small>01</small><p data-preview-letter-one>Escreva sua primeira cartinha e ela aparecerá aqui.</p></article><article><small>02</small><p data-preview-letter-two>A segunda mensagem fica logo abaixo.</p></article><article data-preview-letter-three-wrap hidden><small>03</small><p data-preview-letter-three></p></article></div>
+          <div class="gift-preview-bottom"><span data-preview-sender>Com carinho, você</span><img class="gift-preview-qr" src="/api/gift-sites/qr-sample/classic?v=54" alt="QR Code"></div>
+        </div>
+      </aside>
+    </div>
+    <div class="gift-builder-result" data-gift-result hidden></div>
+  </main>
+  <dialog class="gift-phone-dialog" data-phone-dialog aria-label="Prévia no celular"><div class="gift-phone-toolbar"><strong>Prévia no celular</strong><div><button type="button" data-refresh-phone>Atualizar</button><button type="button" data-close-phone aria-label="Fechar prévia">Fechar ×</button></div></div><div class="gift-phone-frame"><div class="gift-phone-speaker" aria-hidden="true"></div><iframe title="Prévia do site no celular" data-phone-iframe></iframe></div></dialog>
+  <script src="/gift-builder.js?v=60" defer></script>
+</body>
+</html>

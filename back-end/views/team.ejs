@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+  <title>Equipe e acessos | Ella Sorriu</title><link rel="stylesheet" href="/style.css"><script src="/admin.js" defer></script>
+</head>
+<body class="admin-page">
+  <%- include('partials/admin-header', { admin, csrfToken, activeSection: 'team' }) %>
+  <main class="admin-shell">
+    <div class="admin-heading"><div><p class="kicker">Segurança</p><h1>Equipe e acessos</h1></div><% if (['owner', 'admin'].includes(admin.role)) { %><a class="admin-button compact" href="/admin/team/invite">+ Adicionar pessoa</a><% } %></div>
+    <% if (error) { %><p class="admin-alert" role="alert"><%= error %></p><% } %>
+    <div class="team-grid">
+      <% members.forEach(function(member) { %>
+        <article class="team-card">
+          <div class="team-card-heading"><div><h2><%= member.name %></h2><p><%= member.email %></p></div><span class="status-pill <%= member.effectiveActive ? 'is-active' : 'is-inactive' %>"><%= member.effectiveActive ? 'Ativo' : 'Desativado' %></span></div>
+          <dl><dt>Função</dt><dd><%= roleLabels[member.role] %></dd><dt>Último acesso</dt><dd><%= member.last_login_at ? new Date(member.last_login_at + 'Z').toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : 'Ainda não acessou' %></dd><dt>Criado em</dt><dd><%= new Date(member.created_at + 'Z').toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }) %></dd></dl>
+          <% if (['owner', 'admin'].includes(admin.role) && member.role === 'attendant') { %>
+            <section class="approval-exemption" aria-label="Permissão de aprovação de produtos">
+              <h3>Permissões especiais</h3>
+              <form action="/admin/team/<%= member.id %>/product-approval-exemption" method="post">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <label class="approval-exemption-toggle"><input type="checkbox" name="enabled" value="1" <%= Number(member.product_approval_exempt) === 1 ? 'checked' : '' %>><span>Dispensar aprovação de alterações de produtos</span></label>
+                <p>As alterações de produtos feitas por esta conta serão aplicadas imediatamente, sem aprovação prévia. Isso não altera as demais permissões do cargo Atendente.</p>
+                <% if (Number(member.product_approval_exempt) === 1 && member.productApprovalGrantedByName) { %><small>Dispensa concedida por <%= member.productApprovalGrantedByName %><% if (member.product_approval_granted_at) { %> · <%= new Date(Number(member.product_approval_granted_at) * 1000).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' }) %><% } %></small><% } %>
+                <button class="admin-secondary-button" type="submit">Salvar preferência</button>
+              </form>
+            </section>
+          <% } %>
+          <% if (['owner', 'admin'].includes(admin.role) && member.role !== 'support' && member.id !== admin.id && !(admin.role === 'admin' && member.role === 'owner')) { %>
+            <div class="team-card-actions">
+              <% const memberRoleError = roleFormError && Number(roleFormError.memberId) === Number(member.id) ? roleFormError : null; %>
+              <form action="/admin/team/<%= member.id %>/role" method="post" data-role-form>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <label class="team-form-field"><span>Função</span><select name="role" data-admin-role-select><% if (admin.role === 'owner') { %><option value="owner" <%= (memberRoleError ? memberRoleError.role : member.role) === 'owner' ? 'selected' : '' %>>Proprietário</option><% } %><option value="admin" <%= (memberRoleError ? memberRoleError.role : member.role) === 'admin' ? 'selected' : '' %>>Administrador</option><option value="attendant" <%= (memberRoleError ? memberRoleError.role : member.role) === 'attendant' ? 'selected' : '' %>>Atendente</option></select></label>
+                <label class="team-form-field owner-confirmation<%= memberRoleError ? ' has-error' : '' %>" <%= memberRoleError ? '' : 'hidden' %>><span>Confirme a promoção</span><input name="confirm_owner" type="text" autocomplete="off" placeholder="Digite PROMOVER" value="<%= memberRoleError ? memberRoleError.confirmation : '' %>"<% if (memberRoleError) { %> aria-invalid="true" aria-describedby="owner-confirmation-error-<%= member.id %>"<% } %>><% if (memberRoleError) { %><small class="field-error" id="owner-confirmation-error-<%= member.id %>" role="alert"><%= memberRoleError.message %></small><% } %></label>
+                <button class="admin-secondary-button" type="submit">Salvar função</button>
+              </form>
+              <form action="/admin/team/<%= member.id %>/active" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="active" value="<%= member.active ? '0' : '1' %>"><button class="<%= member.active ? 'admin-danger' : 'admin-secondary-button' %>" type="submit"><%= member.active ? 'Desativar acesso' : 'Reativar acesso' %></button></form>
+            </div>
+          <% } %>
+        </article>
+      <% }) %>
+    </div>
+  </main>
+</body>
+</html>

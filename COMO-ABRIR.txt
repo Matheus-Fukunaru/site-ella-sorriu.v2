@@ -1,0 +1,28 @@
+COMO ABRIR A ELLA SORRIU
+
+1. Extraia o arquivo ZIP completo.
+
+2. Abra a pasta extraída.
+
+3. Dê dois cliques em:
+
+   INICIAR-ELLA-SORRIU.bat
+
+Pronto. O navegador será aberto automaticamente.
+
+Na primeira vez, crie a conta da proprietária na tela “Configuração inicial”.
+Nas próximas vezes, o sistema abrirá diretamente a tela de login.
+
+Mantenha a janela “Ella Sorriu” aberta enquanto estiver usando o site.
+
+Não abra PowerShell, terminal ou VS Code. Não é necessário digitar comandos.
+
+Se o computador ainda não tiver Node.js, o iniciador mostrará uma explicação e
+abrirá a página oficial para instalação. Depois, dê dois cliques no iniciador
+novamente.
+
+DEPOIS DA PUBLICAÇÃO
+
+O iniciador deixa de ser necessário. Use somente:
+
+https://DOMINIO-DO-SITE/admin/login

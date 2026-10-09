@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="pt-BR" data-gift-theme="<%= site.theme %>" data-gift-motion="<%= site.reducedMotion ? 'reduce' : 'smooth' %>">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="/">
+  <meta name="description" content="Um site de presente criado com carinho na Ella Sorriu.">
+  <title>Para <%= site.recipientName %> · Ella Sorriu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Great+Vibes&family=Manrope:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/gift-site.css?v=55">
+</head>
+<body class="gift-site-page gift-style-<%= site.style %> gift-font-<%= site.fontStyle || 'editorial' %><%= isPreview ? ' gift-site-preview' : '' %>" data-gift-occasion="<%= site.occasion %>" data-gift-person-style="<%= site.personStyle || 'neutral' %>" data-gift-reading="<%= site.smoothReading ? 'comfortable' : 'compact' %>" data-share-url="<%= shareUrl %>" data-music-external="<%= site.musicExternal ? 'true' : 'false' %>">
+  <% const occasionLines = {
+    'Aniversário': ['Hoje é o seu dia', 'Uma celebração inteira para você', 'Que este novo ciclo guarde muitos motivos para sorrir.'],
+    'Namoro': ['Nossa história', 'Um capítulo que eu escolheria de novo', 'Entre tantos encontros, o nosso continua sendo o meu favorito.'],
+    'Casamento': ['O nosso sim', 'Uma vida de pequenos grandes momentos', 'Que o nosso sim continue florescendo em cada dia.'],
+    'Amizade': ['Para nossa amizade', 'Pelos dias que se tornam lembranças', 'Que a gente continue colecionando histórias para contar.'],
+    'Dia das Mães': ['Para quem sempre cuidou', 'Uma página com abraço de casa', 'Que este carinho volte para você em forma de sorriso.'],
+    'Dia dos Pais': ['Para quem esteve junto', 'Memórias com presença e cuidado', 'Que este presente guarde um pouco da admiração que sinto.'],
+    'Dia das Crianças': ['Pequenas grandes alegrias', 'Um cantinho colorido de lembranças', 'Que a leveza deste dia fique guardada por muito tempo.'],
+    'Agradecimento': ['Com gratidão', 'Um jeito bonito de dizer obrigado', 'Que este gesto lembre o quanto você fez diferença.'],
+    'Formatura': ['Você chegou até aqui', 'Uma conquista para guardar', 'Que esta nova fase comece com orgulho e brilho nos olhos.'],
+    'Natal': ['Um carinho de Natal', 'Memórias para iluminar a noite', 'Que este presente leve afeto para perto de você.'],
+    'Dia dos Namorados': ['Para nós dois', 'Um amor para celebrar', 'Que a nossa história continue encontrando novos motivos para sorrir.'],
+    'Páscoa': ['Um carinho nesta Páscoa', 'Renovar os afetos', 'Que os próximos dias tragam leveza, esperança e encontros bonitos.'],
+    'Bodas': ['A nossa história', 'Anos que viraram casa', 'Que cada ano novo traga mais motivos para comemorar juntos.'],
+    'Boa sorte': ['Vai dar certo', 'Um novo começo para celebrar', 'Que os próximos passos sejam leves e cheios de boas surpresas.'],
+    'Novo emprego': ['Uma nova fase', 'Orgulho de ver você crescer', 'Que esse novo caminho reconheça tudo o que você sabe fazer.']
+  }; const occasionCopy = occasionLines[site.occasion] || occasionLines['Aniversário']; %>
+  <button class="gift-theme-toggle" type="button" data-gift-theme-toggle aria-pressed="false">Modo escuro</button>
+  <main class="gift-site-shell">
+    <section class="gift-site-hero">
+      <p class="gift-kicker"><%= site.occasion %> · Ella Sorriu</p>
+      <div class="gift-hero-composition">
+        <%- include('gift-occasion-art', { occasion: site.occasion }) %>
+        <p class="gift-occasion-line"><%= occasionCopy[0] %></p>
+        <% if (site.showTitle !== false) { %><h1><% if (!site.pageTitle) { %><span>Para</span><% } %> <%= site.pageTitle || site.recipientName %></h1><% } %>
+        <p class="gift-occasion-subtitle"><%= occasionCopy[1] %></p>
+        <p class="gift-intro"><%= site.senderName %> preparou este cantinho para guardar palavras, memórias e carinho.</p>
+      </div>
+    </section>
+
+    <% const mainPhotos = site.photos && site.photos.length ? site.photos : (site.photoUrl ? [{ url: site.photoUrl, description: '', note: '', playMusic: false }] : []); %>
+    <% if (mainPhotos.length) { %>
+      <section class="gift-memories" id="memorias">
+        <div class="gift-section-intro gift-section-intro-clean"><p>Toque em uma foto para descobrir a história por trás dela.</p></div>
+        <div class="<%= site.photoLayout === 'interleaved' ? 'gift-story-sequence' : site.photoLayout === 'alternating' ? 'gift-story-sequence gift-story-alternating' : 'gift-main-gallery' %>">
+          <% if (site.photoLayout === 'interleaved' || site.photoLayout === 'alternating') {
+            const storyItems = [];
+            const photoCount = mainPhotos.length;
+            const letterCount = site.letters.length;
+            if (site.photoLayout === 'alternating') {
+              for (let index = 0; index < Math.max(photoCount, letterCount); index += 1) {
+                if (mainPhotos[index]) storyItems.push({ type:'photo', photo:mainPhotos[index], number:index + 1 });
+                if (site.letters[index]) storyItems.push({ type:'letter', text:site.letters[index], number:index + 1 });
+              }
+            } else {
+            let photoIndex = 0;
+            let letterIndex = 0;
+            // Complete each photo group before placing its letter on a new row.
+            // Keep a final photo group only when there are enough photos for it.
+            const groupCount = Math.max(1, letterCount + (photoCount >= 3 * (letterCount + 1) ? 1 : 0));
+            for (let gap = 0; gap < groupCount; gap += 1) {
+              const targetPhotos = Math.ceil(((gap + 1) * photoCount) / groupCount);
+              while (photoIndex < targetPhotos) {
+                storyItems.push({ type: 'photo', photo: mainPhotos[photoIndex], number: photoIndex + 1 });
+                photoIndex += 1;
+              }
+              if (gap < letterCount && site.letters[letterIndex]) {
+                storyItems.push({ type: 'letter', text: site.letters[letterIndex], number: letterIndex + 1 });
+                letterIndex += 1;
+              }
+            }
+            }
+            storyItems.forEach((item) => { if (item.type === 'photo') { const photo = item.photo; %>
+            <button class="gift-photo-tile" type="button" data-photo-open data-photo-src="<%= photo.url %>" data-photo-description="<%= photo.description || '' %>" data-photo-note="<%= photo.note || '' %>" data-photo-music="<%= photo.playMusic ? 'true' : 'false' %>" data-photo-number="<%= item.number %>" aria-label="Abrir foto <%= item.number %>">
+              <img src="<%= photo.url %>" alt="<%= photo.description || 'Foto do presente' %>" loading="<%= item.number === 1 ? 'eager' : 'lazy' %>">
+            </button>
+            <% } else { %><article class="gift-letter-card"><p><%= item.text %></p></article><% } });
+          } else { mainPhotos.forEach((photo, index) => { %>
+            <button class="gift-photo-tile" type="button" data-photo-open data-photo-src="<%= photo.url %>" data-photo-description="<%= photo.description || '' %>" data-photo-note="<%= photo.note || '' %>" data-photo-music="<%= photo.playMusic ? 'true' : 'false' %>" data-photo-number="<%= index + 1 %>" aria-label="Abrir foto <%= index + 1 %>">
+              <img src="<%= photo.url %>" alt="<%= photo.description || 'Foto do presente' %>" loading="<%= index === 0 ? 'eager' : 'lazy' %>">
+            </button>
+          <% }); } %>
+        </div>
+      </section>
+    <% } else { %><div id="memorias"></div><% } %>
+
+    <% if (site.musicUrl) { %>
+      <section class="gift-music" aria-label="Música escolhida">
+        <div class="gift-music-copy"><p class="gift-kicker">Uma trilha para este momento</p><h2><%= site.musicTitle || 'A nossa música.' %></h2><span><%= site.musicExternal ? 'Toque para abrir a música escolhida.' : 'Toque para dar play na lembrança.' %></span><details class="gift-music-help"><summary>Como ouvir ou baixar</summary><ol><li>Toque em <strong>Reproduzir</strong> para ouvir no site.</li><li>Para guardar a música, use <strong>Baixar música</strong> quando ela foi enviada para este site.</li><li>Se for um link externo, toque em <strong>Abrir música</strong> e use o botão de download do serviço.</li></ol></details></div>
+        <div class="gift-music-actions">
+          <% if (site.musicExternal) { %>
+            <a class="gift-music-link" href="<%= site.musicUrl %>" target="_blank" rel="noopener noreferrer">♪ Abrir música ↗</a><a class="gift-music-download" href="<%= site.musicUrl %>" target="_blank" rel="noopener noreferrer">Baixar no serviço ↓</a>
+          <% } else { %>
+            <div class="gift-player-controls">
+              <button type="button" data-music-toggle aria-label="Reproduzir música" aria-pressed="false">♪ Reproduzir</button>
+              <div class="gift-volume-control">
+                <button type="button" class="gift-volume-toggle" data-volume-toggle aria-label="Ajustar volume" aria-expanded="false" aria-controls="gift-volume-panel"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4 5 9H2v6h3l6 5Z"/><path data-volume-waves d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path data-volume-muted d="m16 9 6 6m0-6-6 6" hidden/></svg></button>
+                <div class="gift-volume-panel" id="gift-volume-panel" data-volume-panel hidden><label for="gift-volume">Volume <output data-volume-value for="gift-volume">100%</output></label><input id="gift-volume" data-volume type="range" min="0" max="100" value="100" aria-label="Volume da música"></div>
+              </div>
+            </div>
+            <a class="gift-music-download" href="<%= site.musicUrl %>" download="musica-ella-sorriu">Baixar música ↓</a><audio data-gift-audio src="<%= site.musicUrl %>" preload="none" loop></audio>
+          <% } %>
+        </div>
+      </section>
+    <% } %>
+
+    <% if (!['interleaved', 'alternating'].includes(site.photoLayout) || !mainPhotos.length) { %>
+    <section class="gift-letters" aria-labelledby="gift-letters-title">
+      <p class="gift-kicker">Com todo o carinho</p>
+      <h2 id="gift-letters-title">Algumas palavras para guardar.</h2>
+      <div class="gift-letter-grid">
+        <% site.letters.forEach((letter, index) => { %>
+          <article class="gift-letter-card"><p><%= letter %></p></article>
+        <% }); %>
+      </div>
+    </section>
+    <% } %>
+    <% if (site.extraNote) { %><blockquote class="gift-extra-note"><%= site.extraNote %></blockquote><% } %>
+
+    <% (site.carousels || []).forEach((carousel, carouselIndex) => { if (carousel.photos && carousel.photos.length) { %>
+      <section class="gift-carousel-section" aria-label="<%= carousel.title || ('Mais momentos ' + (carouselIndex + 1)) %>">
+        <div class="gift-carousel-heading"><div><p class="gift-kicker">Álbum 0<%= carouselIndex + 1 %></p><h2><%= carousel.title || 'Mais momentos nossos' %></h2></div><div class="gift-carousel-controls"><button type="button" data-carousel-prev aria-label="Fotos anteriores">←</button><button type="button" data-carousel-next aria-label="Próximas fotos">→</button></div></div>
+        <div class="gift-carousel-track" data-carousel-track>
+          <% carousel.photos.forEach((photo, index) => { %>
+            <button class="gift-carousel-photo" type="button" data-photo-open data-photo-src="<%= photo.url %>" data-photo-description="<%= photo.description || '' %>" data-photo-note="<%= photo.note || '' %>" data-photo-music="<%= photo.playMusic ? 'true' : 'false' %>" data-photo-number="<%= index + 1 %>" aria-label="Abrir foto do álbum">
+              <img src="<%= photo.url %>" alt="<%= photo.description || 'Foto do presente' %>" loading="lazy"><span><%= photo.description || 'Ver foto' %></span>
+            </button>
+          <% }); %>
+        </div>
+      </section>
+    <% } }); %>
+
+    <section class="gift-closing">
+      <div><p class="gift-kicker">Com carinho,</p><h2><%= site.senderName %></h2><p><%= occasionCopy[2] %></p></div>
+      <div class="gift-qr-wrap" data-qr-style="<%= site.qrStyle %>"><div class="gift-qr" role="img" aria-label="QR Code para abrir este site"><img data-gift-qr src="<%= qrDataUrl %>" alt="QR Code para abrir este site" width="320" height="320"></div><small>Aponte a câmera para o centro do QR</small><div class="gift-share-actions"><button type="button" data-download-qr>Baixar QR em PNG</button><button type="button" data-share-site>Compartilhar</button><button type="button" data-copy-instagram>Copiar para Instagram</button><a href="https://wa.me/?text=<%= encodeURIComponent('Olha o presente que fiz para você: ' + shareUrl) %>" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a></div><p data-share-status aria-live="polite"></p></div>
+    </section>
+    <footer class="gift-site-footer"><a href="/" class="gift-brand">Ella Sorriu</a><span>Flores · Presentes · Balões</span></footer>
+  </main>
+  <dialog class="gift-photo-dialog" data-photo-dialog aria-label="Foto e lembrança"><button class="gift-photo-close" type="button" data-photo-close aria-label="Fechar foto">×</button><img data-photo-large alt="Foto ampliada"><div class="gift-photo-story"><p data-photo-description></p><p data-photo-note></p><button type="button" data-photo-play hidden>♪ Reproduzir música</button></div></dialog>
+  <script src="/gift-site.js?v=59" defer></script>
+</body>
+</html>

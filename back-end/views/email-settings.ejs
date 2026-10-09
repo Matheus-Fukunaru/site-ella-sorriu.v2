@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Configurar e-mail | Ella Sorriu</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/admin.js" defer></script>
+</head>
+<body class="admin-page">
+  <%- include('partials/admin-header', { admin, csrfToken, activeSection: 'settings' }) %>
+  <main class="admin-shell narrow email-settings-page">
+    <p class="kicker">Configurações</p>
+    <h1>E-mail automático</h1>
+    <p class="admin-muted">A configuração fica salva somente neste computador e será encontrada pelas próximas versões da Ella Sorriu.</p>
+    <% if (error) { %><p class="admin-alert" role="alert"><%= error %></p><% } %>
+    <% if (success) { %><p class="admin-alert is-success" role="status"><%= success %></p><% } %>
+    <form class="admin-panel admin-form email-settings-form" method="post" data-email-settings-form>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="field-row">
+        <label>E-mail remetente<input type="email" name="sender_email" autocomplete="email" required maxlength="160" value="<%= values.senderEmail %>"></label>
+        <label>Nome do remetente<input type="text" name="sender_name" autocomplete="organization" required maxlength="100" value="<%= values.senderName %>"></label>
+      </div>
+      <div class="field-row">
+        <label>SMTP host<input type="text" name="smtp_host" autocomplete="off" required maxlength="253" value="<%= values.host %>"></label>
+        <label>Porta<input type="number" name="smtp_port" inputmode="numeric" min="1" max="65535" required value="<%= values.port %>"></label>
+      </div>
+      <fieldset class="email-secure-choice">
+        <legend>Conexão segura</legend>
+        <label><input type="radio" name="smtp_secure" value="true" <%= values.secure ? 'checked' : '' %>> Sim</label>
+        <label><input type="radio" name="smtp_secure" value="false" <%= !values.secure ? 'checked' : '' %>> Não</label>
+      </fieldset>
+      <label>Usuário SMTP<input type="text" name="smtp_user" autocomplete="username" required maxlength="254" value="<%= values.user %>"></label>
+      <label>Senha de app<input type="password" name="smtp_pass" autocomplete="new-password" maxlength="512" value="" placeholder="<%= values.passwordConfigured ? 'Senha configurada — deixe em branco para manter' : 'Digite a senha de app' %>"></label>
+      <% if (values.passwordConfigured) { %><p class="email-password-status">Senha configurada ✓</p><% } %>
+      <div class="email-settings-actions">
+        <button class="admin-button" type="submit" formaction="/admin/settings/email">Salvar configuração <span>→</span></button>
+        <button class="admin-button secondary" type="submit" formaction="/admin/settings/email/test">Testar envio</button>
+        <a href="/admin/settings">Voltar</a>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

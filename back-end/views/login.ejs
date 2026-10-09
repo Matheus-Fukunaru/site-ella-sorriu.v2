@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Entrar no painel | Ella Sorriu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/admin.js" defer></script>
+</head>
+<body class="admin-page admin-login-page">
+  <main class="admin-login">
+    <a class="admin-brand" href="/"><span>Ella Sorriu</span><small>Painel de pedidos</small></a>
+    <section class="admin-panel">
+      <p class="kicker">Acesso reservado</p>
+      <h1>Bem-vinda.</h1>
+      <p class="admin-muted">Entre para acompanhar e organizar os pedidos.</p>
+      <% if (querySuccess) { %><p class="admin-alert admin-alert-success" role="status"><%= querySuccess %></p><% } %>
+      <% if (error) { %><p class="admin-alert" role="alert"><%= error %></p><% } %>
+      <form action="/admin/login" method="post">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <label>E-mail<input name="email" type="email" autocomplete="username" required maxlength="160"></label>
+        <label>Senha<input name="password" type="password" autocomplete="current-password" required minlength="12" maxlength="72"></label>
+        <button class="admin-button" type="submit">Entrar no painel <span>→</span></button>
+      </form>
+      <a class="admin-help-link" href="/admin/forgot-password">Esqueci minha senha</a>
+    </section>
+  </main>
+</body>
+</html>

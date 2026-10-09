@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR" data-admin-theme="<%= (typeof theme === 'string' && theme === 'dark') ? 'dark' : 'light' %>">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Produtos | Ella Sorriu</title><link rel="stylesheet" href="/style.css"><script src="/admin.js" defer></script></head>
+<body class="admin-page">
+  <%- include('partials/admin-header', { admin, csrfToken, activeSection: 'products' }) %>
+  <main class="admin-shell products-admin">
+    <div class="admin-heading"><div><p class="kicker">Catálogo Ella Sorriu</p><h1>Produtos</h1><p class="admin-description">Cadastre e organize os produtos que aparecem no site após publicação.</p></div><a class="admin-button compact" href="/admin/products/new">+ Novo produto</a></div>
+    <% if (error) { %><p class="admin-alert" role="alert"><%= error %></p><% } %>
+    <% if (success) { %><p class="admin-success" role="status"><%= success %></p><% } %>
+    <% if (canReviewProducts && pendingCount > 0) { %><a class="product-pending-banner" href="/admin/approvals"><strong><%= pendingCount %></strong> alteração(ões) aguardando aprovação <span>Revisar →</span></a><% } %>
+    <% if (canManageCategories) { %>
+      <section class="admin-panel product-category-manager">
+        <div class="product-section-heading"><div><p class="kicker">Organização</p><h2>Categorias</h2></div></div>
+        <form class="product-category-create" action="/admin/products/categories" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label>Nova categoria<input name="name" required minlength="2" maxlength="80" placeholder="Ex.: Dia das Crianças"></label><button class="admin-secondary-button" type="submit">Adicionar categoria</button></form>
+        <div class="product-category-list"><% categories.forEach(function(category) { %><article><div><strong><%= category.name %></strong><small><%= category.product_count %> produto(s) · <%= category.active ? 'Ativa' : 'Arquivada' %></small></div><form action="/admin/products/categories/<%= category.id %>" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label class="sr-only" for="category-name-<%= category.id %>">Nome da categoria <%= category.name %></label><input id="category-name-<%= category.id %>" name="name" value="<%= category.name %>" required minlength="2" maxlength="80"><button class="admin-text-button" type="submit">Salvar</button></form><form action="/admin/products/categories/<%= category.id %>/active" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="active" value="<%= category.active ? '0' : '1' %>"><button class="admin-text-button" type="submit"><%= category.active ? 'Arquivar' : 'Reativar' %></button></form></article><% }) %></div>
+      </section>
+    <% } %>
+    <section class="product-admin-list" aria-label="Produtos cadastrados">
+      <% if (!products.length) { %><div class="admin-empty"><h2>Nenhum produto cadastrado</h2><p>Adicione o primeiro produto para iniciar o catálogo.</p></div><% } %>
+      <% products.forEach(function(product) { %>
+        <article class="product-admin-card">
+          <a class="product-admin-photo" href="<%= product.photos.length ? '/admin/products/media/' + encodeURIComponent(product.photos[0]) : '#' %>" aria-label="Prévia de <%= product.name %>"><% if (product.photos.length) { %><img src="/admin/products/media/<%= encodeURIComponent(product.photos[0]) %>" alt="Foto de <%= product.name %>" loading="lazy"><% } else { %><span>Sem foto</span><% } %></a>
+          <div class="product-admin-info"><div class="product-admin-title"><div><span class="status-pill <%= product.active ? 'is-active' : 'is-inactive' %>"><%= product.deletedAt ? 'Arquivado' : product.active ? (product.available ? 'Disponível' : 'Indisponível') : 'Inativo' %></span><h2><%= product.name %></h2><p><%= product.categoryName %></p></div><p class="product-admin-price"><%= product.priceCents == null ? 'Valor sob consulta' : new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.priceCents / 100) %></p></div><% if (product.description) { %><p class="product-admin-description"><%= product.description %></p><% } %>
+            <div class="product-admin-actions"><% if (!product.deletedAt && !product.pending) { %><a class="admin-secondary-button" href="/admin/products/<%= product.id %>/edit">Editar</a><% } %><% if (product.active && !product.deletedAt) { %><a class="admin-text-button" href="/produto.html?produto=<%= encodeURIComponent(product.slug) %>" target="_blank" rel="noopener">Pré-visualizar</a><form action="/admin/products/<%= product.id %>/state" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="action" value="deactivate"><button class="admin-text-button" type="submit">Solicitar desativação</button></form><form action="/admin/products/<%= product.id %>/state" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="action" value="delete"><button class="admin-text-button product-archive-action" type="submit">Solicitar arquivamento</button></form><% } %></div>
+            <% if (product.pending) { %><p class="product-pending-note">Há uma solicitação pendente para este produto.</p><% } %>
+          </div>
+        </article>
+      <% }) %>
+    </section>
+  </main>
+</body></html>

@@ -1,0 +1,21 @@
+<header class="admin-topbar">
+  <a class="admin-brand" href="/admin"><span>Ella Sorriu</span><small><%= admin.name %> · <%= ({ owner: 'Proprietário', support: 'Suporte técnico', admin: 'Administrador', attendant: 'Atendente' })[admin.role] %></small></a>
+  <button class="admin-menu-toggle" type="button" aria-expanded="false" aria-controls="admin-navigation">
+    <span></span><span></span><span></span><span class="sr-only">Abrir menu</span>
+  </button>
+  <nav id="admin-navigation" class="admin-navigation" aria-label="Administração">
+    <p>Administração</p>
+    <a class="<%= activeSection === 'orders' ? 'active' : '' %>" href="/admin/orders">Pedidos</a>
+    <% if (['owner', 'admin'].includes(admin.role)) { %><a class="<%= activeSection === 'music' ? 'active' : '' %>" href="/admin/music">Músicas</a><% } %>
+    <% if (['owner', 'admin', 'attendant'].includes(admin.role)) { %><a class="<%= activeSection === 'products' ? 'active' : '' %>" href="/admin/products">Produtos</a><% } %>
+    <% if (['owner', 'admin'].includes(admin.role)) { %><a class="<%= activeSection === 'approvals' ? 'active' : '' %>" href="/admin/approvals">Aprovações</a><% } %>
+    <% if (['owner', 'admin', 'attendant', 'support'].includes(admin.role)) { %><a class="<%= activeSection === 'clients' ? 'active' : '' %>" href="/admin/clients">Clientes</a><% } %>
+    <% if (['owner', 'admin', 'support'].includes(admin.role)) { %><a class="<%= activeSection === 'team' ? 'active' : '' %>" href="/admin/team">Equipe e acessos</a><% } %>
+    <% if (['owner', 'admin'].includes(admin.role)) { %><a class="<%= activeSection === 'support' ? 'active' : '' %>" href="/admin/support">Suporte</a><% } %>
+    <% if (['owner', 'admin', 'attendant', 'support'].includes(admin.role)) { %><a class="<%= activeSection === 'settings' ? 'active' : '' %>" href="/admin/settings">Configurações</a><% } %>
+    <form action="/admin/logout" method="post">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button class="admin-text-button" type="submit">Sair</button>
+    </form>
+  </nav>
+</header>

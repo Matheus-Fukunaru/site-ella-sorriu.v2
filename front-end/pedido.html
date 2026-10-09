@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Faça seu pedido na Ella Sorriu: escolha a cesta, personalize a mensagem e combine a entrega. Resposta rápida pelo WhatsApp.">
+  <meta name="theme-color" content="#f3eee7">
+  <title>Faça seu pedido | Ella Sorriu</title>
+
+  <!-- Atualize para o domínio real do site -->
+  <link rel="canonical" href="https://www.ellasorriu.com.br/pedido.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Faça seu pedido | Ella Sorriu">
+  <meta property="og:description" content="Escolha a cesta, personalize a mensagem e combine a entrega com a Ella Sorriu.">
+  <meta property="og:url" content="https://www.ellasorriu.com.br/pedido.html">
+  <meta property="og:image" content="https://www.ellasorriu.com.br/images/hero/hero-poster.webp">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=59">
+</head>
+
+<body class="order-page">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="order-header container">
+    <a class="logo" href="/index.html">
+      <span>Ella Sorriu</span>
+      <small>Flores · Presentes · Balões</small>
+    </a>
+
+    <div class="public-theme-selector compact" aria-label="Tema do site"><button type="button" data-public-theme-option="light" aria-pressed="false" title="Tema claro">☀</button><button type="button" data-public-theme-option="dark" aria-pressed="false" title="Tema escuro">☾</button></div>
+  </header>
+
+  <main class="order-main" id="conteudo">
+    <section class="order-card">
+      <p class="kicker">Seu momento especial</p>
+      <h1 data-order-title>Monte seu presente</h1>
+
+      <p class="order-intro">
+        Conte para nós como gostaria de presentear. Entraremos em contato pelo
+        WhatsApp para deixar tudo perfeito.
+      </p>
+
+      <form id="order-form" action="/api/orders" method="POST" novalidate>
+
+        <p class="form-required-note">Os campos marcados com * são obrigatórios.</p>
+
+        <fieldset>
+          <legend>Seus dados</legend>
+
+          <div class="field">
+            <label for="name">Seu nome <span aria-hidden="true">*</span></label>
+            <input id="name" name="nome" type="text"
+                   placeholder="Como podemos te chamar?" required>
+          </div>
+
+          <div class="field">
+            <label for="phone">Seu WhatsApp <span aria-hidden="true">*</span></label>
+            <input id="phone" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel"
+                   placeholder="+55 (00) 00000-0000" maxlength="20"
+                   pattern="^\+55 \(\d{2}\) \d{4,5}-\d{4}$"
+                   required>
+          </div>
+
+          <div class="field">
+            <label for="email">Seu e-mail</label>
+            <input id="email" name="email" type="email"
+                   placeholder="seu@email.com" autocomplete="email">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Sobre o presente</legend>
+
+          <div class="field">
+            <label for="occasion">Qual é a ocasião? <span aria-hidden="true">*</span></label>
+            <select id="occasion" name="ocasiao" required>
+              <option value="" selected disabled>Selecione uma opção</option>
+              <option>Aniversário</option>
+              <option>Namoro</option>
+              <option>Dia dos Namorados</option>
+              <option>Casamento</option>
+              <option>Agradecimento</option>
+              <option>Pedido de desculpas</option>
+              <option>Outra</option>
+            </select>
+          </div>
+
+          <div class="field order-basket-field">
+            <input id="basket" name="cesta" type="hidden">
+            <div data-basket-summary hidden>
+              <p class="basket-label">Seu presente escolhido</p>
+              <div class="basket-summary" data-basket-preview></div>
+              <button class="basket-change" type="button" data-basket-change>Trocar presente</button>
+            </div>
+            <div data-basket-picker>
+              <p class="basket-label" id="basket-label">Escolha seu presente pela foto <span aria-hidden="true">*</span></p>
+              <p class="field-help" data-basket-help aria-live="polite">Escolha a ocasião acima para ver os presentes disponíveis.</p>
+              <div class="basket-options" data-basket-options role="group" aria-labelledby="basket-label" hidden></div>
+            </div>
+            <p class="basket-error" data-basket-error role="alert" hidden>Escolha um presente para continuar.</p>
+            <noscript>Ative o JavaScript para escolher seu presente ou faça seu pedido pelo WhatsApp abaixo.</noscript>
+          </div>
+
+        </fieldset>
+
+        <fieldset>
+          <legend>Personalização</legend>
+
+          <div class="field">
+            <label for="card-message">Mensagem para colocar no presente</label>
+            <textarea id="card-message" name="mensagem" rows="3" maxlength="600"
+                      placeholder="O que você gostaria de escrever no cartão?"></textarea>
+          </div>
+
+        </fieldset>
+
+        <fieldset>
+          <legend>Entrega</legend>
+
+          <div class="field">
+            <label for="city">Cidade <span aria-hidden="true">*</span></label>
+            <input id="city" name="cidade" type="text" maxlength="120"
+                   placeholder="Ex: Mogi das Cruzes" required>
+          </div>
+
+          <div class="field">
+            <label for="neighborhood">Bairro</label>
+            <input id="neighborhood" name="bairro" type="text" maxlength="120"
+                   placeholder="Ex: Nova Mogilar">
+          </div>
+
+          <div class="field">
+            <label for="date-trigger">Data desejada</label>
+            <div class="date-picker" data-date-picker>
+              <input id="date" name="data_desejada" type="hidden">
+              <button id="date-trigger" class="date-trigger" type="button"
+                      aria-haspopup="dialog" aria-expanded="false" aria-controls="date-calendar"
+                      aria-describedby="date-help">
+                <span class="date-value">Escolha uma data</span>
+                <span class="date-trigger-icon" aria-hidden="true">▦</span>
+              </button>
+
+              <div id="date-calendar" class="date-calendar" role="dialog"
+                   aria-labelledby="calendar-month" hidden>
+                <div class="calendar-header">
+                  <button class="calendar-nav calendar-prev" type="button" aria-label="Mês anterior">←</button>
+                  <strong id="calendar-month" class="calendar-month" aria-live="polite"></strong>
+                  <button class="calendar-nav calendar-next" type="button" aria-label="Próximo mês">→</button>
+                </div>
+                <div class="calendar-weekdays" aria-hidden="true">
+                  <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+                </div>
+                <div class="calendar-days" role="grid" aria-label="Dias do mês"></div>
+                <div class="calendar-footer">
+                  <button class="calendar-clear" type="button">Limpar</button>
+                  <button class="calendar-today" type="button">Hoje</button>
+                </div>
+              </div>
+            </div>
+            <small id="date-help" class="field-help">Escolha uma data a partir de hoje.</small>
+          </div>
+        </fieldset>
+
+        <!-- Campo isca contra spam: fica invisível para pessoas, mas bots costumam preenchê-lo -->
+        <div class="field field-hidden" aria-hidden="true">
+          <label for="honey">Não preencha este campo</label>
+          <input id="honey" type="text" name="_honey" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="button order-submit" type="submit">
+          <span class="submit-label">Enviar pedido</span>
+          <span class="button-orb" aria-hidden="true">↗</span>
+        </button>
+        <p id="form-feedback" class="form-feedback" role="status" aria-live="polite" hidden></p>
+      </form>
+
+      <section class="order-next-step" data-order-next hidden aria-labelledby="order-next-title" tabindex="-1">
+        <h2 id="order-next-title">Seu pedido foi recebido.</h2>
+        <p>Quando quiser, continue pelo WhatsApp para combinar os detalhes da encomenda.</p>
+        <div class="order-next-actions"><a class="button button-secondary" href="/presente-3d.html">Ver demonstração 3D ↗</a><a class="button button-primary" data-order-whatsapp>Encomendar pelo WhatsApp ↗</a></div>
+      </section>
+
+      <p class="form-note">
+        Prefere falar agora?
+        <a data-main-whatsapp-link href="https://wa.me/5511940346224?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido." target="_blank" rel="noopener">
+          Chame no WhatsApp ↗
+        </a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="order-footer">
+    © 2026 Ella Sorriu · Todos os direitos reservados
+  </footer>
+
+  <a class="whatsapp-float" href="https://wa.me/5511940346224?text=Ol%C3%A1!%20Estou%20preenchendo%20o%20formul%C3%A1rio%20da%20Ella%20Sorriu%20e%20preciso%20de%20ajuda." target="_blank" rel="noopener" aria-label="Falar com a Ella Sorriu pelo WhatsApp">
+    <span class="whatsapp-float-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M20.5 3.5A10.2 10.2 0 0 0 4.6 16.1L3.5 20.5l4.5-1.1A10.2 10.2 0 1 0 20.5 3.5Zm-8.3 16.1a8.4 8.4 0 0 1-4.3-1.2l-.3-.2-2.7.7.7-2.6-.2-.3a8.4 8.4 0 1 1 6.8 3.6Zm4.6-6.3c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.8c-.1.1-.3.2-.5.1a6.8 6.8 0 0 1-2-1.2 7.5 7.5 0 0 1-1.4-1.7c-.1-.2 0-.3.1-.4l.4-.5.2-.4c.1-.1 0-.3 0-.4l-.7-1.7c-.2-.5-.4-.4-.5-.4h-.4c-.1 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.3c.1.2 1.6 2.5 3.9 3.5.5.2.9.4 1.2.5.5.2 1 .2 1.4.1.4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1Z"/></svg></span><span class="whatsapp-float-copy"><strong>Fale conosco</strong><small>WhatsApp</small></span>
+  </a>
+
+  <script src="script.js?v=59"></script>
+</body>
+</html>

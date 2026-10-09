@@ -1,0 +1,34 @@
+{
+  "name": "ella-sorriu",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Site e painel de pedidos da Ella Sorriu",
+  "main": "back-end/server.js",
+  "scripts": {
+    "start": "node back-end/server.js",
+    "dev": "node --watch back-end/server.js",
+    "create-admin": "node back-end/scripts/createAdmin.js",
+    "check": "node --check back-end/server.js && node --check back-end/routes/admin.js && node --check back-end/routes/orders.js && node --check back-end/routes/giftSites.js && node --check back-end/controllers/productsController.js && node --check back-end/controllers/giftSitesController.js && node --check back-end/controllers/giftMediaController.js && node --check back-end/utils/giftQr.js && node --check back-end/models/productsModel.js && node --check back-end/models/giftSitesModel.js && node --check back-end/controllers/teamController.js && node --check front-end/script.js && node --check front-end/admin.js && node --check front-end/gift-builder.js && node --check front-end/gift-site.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^10.0.0",
+    "qrcode": "^1.5.4",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

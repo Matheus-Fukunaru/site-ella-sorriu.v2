@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Pedidos | Ella Sorriu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/admin.js" defer></script>
+</head>
+<body class="admin-page">
+  <%- include('partials/admin-header', { admin, csrfToken, activeSection }) %>
+  <main class="admin-shell">
+    <div class="admin-heading">
+      <div><p class="kicker">Gestão</p><h1>Pedidos</h1></div>
+      <span><%= orders.length %> <%= orders.length === 1 ? 'pedido' : 'pedidos' %></span>
+    </div>
+    <nav class="admin-filters" aria-label="Filtrar pedidos">
+      <a class="<%= !statusFilter ? 'active' : '' %>" href="/admin/orders">Todos</a>
+      <% statusOptions.forEach(function(status) { %>
+        <a class="status-filter <%= statusClass(status) %> <%= statusFilter === status ? 'active' : '' %>" href="/admin/orders?status=<%= encodeURIComponent(status) %>"><%= status %></a>
+      <% }) %>
+    </nav>
+    <% if (!orders.length) { %>
+      <section class="admin-empty"><h2>Nenhum pedido por aqui.</h2><p>Os novos pedidos aparecerão nesta tela.</p></section>
+    <% } else { %>
+      <div class="admin-table-wrap">
+        <table class="admin-table" data-orders-table>
+          <thead><tr><th>Pedido</th><th>Cliente</th><th>Presente</th><th>Entrega</th><th>Status</th><th>Recebido em</th><th>Ações</th></tr></thead>
+          <tbody>
+          <% orders.forEach(function(order) { %>
+            <tr data-order-row data-order-created="<%= new Date(order.created_at + 'Z').getTime() %>">
+              <td data-label="Pedido">#<%= order.id %></td>
+              <td data-label="Cliente"><strong><%= order.nome %></strong><small><span data-phone-display><%= order.whatsapp %></span></small></td>
+              <td data-label="Presente"><%= order.cesta %></td>
+              <td data-label="Entrega"><%= order.data_desejada || 'A combinar' %></td>
+              <td data-label="Status"><span class="status-pill <%= statusClass(order.status) %>"><%= order.status %></span></td>
+              <td data-label="Recebido"><%= new Date(order.created_at + 'Z').toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short', timeZone: 'America/Sao_Paulo' }) %></td>
+              <td data-label="Ações" class="admin-row-actions">
+                <a class="admin-row-link" href="/admin/orders/<%= order.id %>">Ver pedido</a>
+                <% if (order.whatsappUrl) { %><a class="admin-row-link" href="<%= order.whatsappUrl %>" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a><% } %>
+              </td>
+            </tr>
+          <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </main>
+</body>
+</html>

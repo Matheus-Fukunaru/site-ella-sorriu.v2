@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Pedido #<%= order.id %> | Ella Sorriu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/admin.js" defer></script>
+</head>
+<body class="admin-page">
+  <%- include('partials/admin-header', { admin, csrfToken, activeSection: 'orders' }) %>
+  <main class="admin-shell admin-detail">
+    <div class="admin-heading"><div><p class="kicker">Pedido #<%= order.id %></p><h1><%= order.nome %></h1></div><span class="status-pill <%= statusClass(order.status) %>"><%= order.status %></span></div>
+    <section class="detail-grid">
+      <article><h2>Contato</h2><dl>
+        <dt>WhatsApp</dt><dd><span data-phone-display><%= order.whatsapp %></span></dd>
+        <dt>E-mail</dt><dd><%= order.email || 'Não informado' %></dd>
+        <dt>Destinatário</dt><dd><%= order.destinatario || 'Não informado' %></dd>
+      </dl></article>
+      <article><h2>Presente</h2><dl>
+        <dt>Composição</dt><dd><%= order.cesta %></dd>
+        <dt>Ocasião</dt><dd><%= order.ocasiao %></dd>
+        <dt>Mensagem</dt><dd><%= order.mensagem || 'Não informada' %></dd>
+        <dt>Preferências</dt><dd><%= order.preferencias || 'Não informadas' %></dd>
+      </dl></article>
+      <article><h2>Entrega</h2><dl>
+        <dt>Local</dt><dd><%= order.cidade %><%= order.bairro ? ' · ' + order.bairro : '' %></dd>
+        <dt>Data</dt><dd><%= order.data_desejada || 'A combinar' %></dd>
+        <dt>Observações</dt><dd><%= order.observacoes || 'Nenhuma' %></dd>
+      </dl></article>
+    </section>
+    <section class="admin-actions">
+      <% if (whatsappUrl) { %>
+        <a class="admin-button admin-whatsapp" href="<%= whatsappUrl %>" target="_blank" rel="noopener noreferrer">Chamar no WhatsApp <span>↗</span></a>
+      <% } %>
+      <form action="/admin/orders/<%= order.id %>/status" method="post">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <label>Atualizar status<select name="status" required><% statusOptions.forEach(function(status) { %><option value="<%= status %>" <%= order.status === status ? 'selected' : '' %>><%= status %></option><% }) %></select></label>
+        <button class="admin-button" type="submit">Salvar status</button>
+      </form>
+      <% if (admin.role !== 'attendant') { %><form action="/admin/orders/<%= order.id %>/delete" method="post" data-confirm-delete>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button class="admin-danger" type="submit">Excluir pedido</button>
+      </form><% } %>
+    </section>
+  </main>
+</body>
+</html>
